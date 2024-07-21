@@ -1,0 +1,12 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+
+<form asp-controller="TinyUrl" asp-action="CreateUrl" method="post">
+    <div>
+        <h1> Register new url: </h1>
+        <input type="text" name="inputUrl" value="http://google.com/">
+        <button type="submit">Get short url</button>
+    </div>
+</form>
