@@ -1,4 +1,8 @@
 using System.Interview.TinyUrl.ByHash.DataLayer;
+using OpenTelemetry.Logs;
+using OpenTelemetry.Metrics;
+using OpenTelemetry.Resources;
+using OpenTelemetry.Trace;
 
 namespace System.Interview.TinyUrl.ByHash;
 
@@ -10,6 +14,23 @@ public class Program
 
         // Add services to the container.
         builder.Services.AddControllersWithViews();
+
+        const string serviceName = "TinyUrlByHash";
+
+
+        //todo: create Aspire.ServiceDefaults project in order to spin up telemetry instrumentation
+        //https://learn.microsoft.com/en-us/dotnet/aspire/fundamentals/service-defaults
+
+        builder.Logging.AddOpenTelemetry(options =>
+        {
+            options.SetResourceBuilder(
+                ResourceBuilder.CreateDefault().AddService(serviceName)).AddConsoleExporter();
+        });
+
+        builder.Services.AddOpenTelemetry()
+            .ConfigureResource(resource => resource.AddService(serviceName))
+            .WithTracing(tracing => tracing.AddAspNetCoreInstrumentation().AddConsoleExporter())
+            .WithMetrics(metrics => metrics.AddAspNetCoreInstrumentation().AddConsoleExporter());
 
         var app = builder.Build();
 

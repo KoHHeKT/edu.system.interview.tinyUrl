@@ -15,6 +15,7 @@ public class UnitTest1
     [Fact]
     public void Test1()
     {
+        //todo: write tests for all int range
         for (byte i = 0; i < byte.MaxValue; i++)
         {
             var encodeInt = Base62Encoder.Encode(i);
